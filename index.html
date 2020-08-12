@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Yaman Player</title>
+  <meta name="viewport" content="width=device-width; initial-scale=1">
+  <style>
+    .poster-icon {
+      /* color:aquamarine; */
+      background-color: #0742cd;
+      padding: 18px 64px;
+      border-radius: 20px;
+      /* box-shadow:  2px 2px yellow; */
+    }
+    .player-poster[data-poster] .play-wrapper[data-poster] svg {
+      height: 80px !important;
+    }
+    button.media-control-button[data-hd-indicator] {
+      display: none !important;
+    }
+    @media(max-width: 900px) {
+      .drawer-container[data-volume] {
+        display: block !important;
+      }
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dash-shaka-playback@latest/dist/dash-shaka-playback.min.js"></script>
+</head>
+
+<body style="margin: 0; padding:0;">
+  <div id="player" style="margin: 0; padding:0;"></div>
+  <script>
+    window.addEventListener('DOMContentLoaded', function () {
+      var player = new Clappr.Player({
+        parentId: '#player',
+        source: 'http://ymnv.tk:8080/hls/kurban.m3u8',
+        hlsjsConfig: {
+          maxMaxBufferLength: 33,
+        },
+        hideMediaControl: true
+      });
+      window.player = player;
+
+      player.on('pause', () => {
+        player.options.hideMediaControl = false;
+      })
+
+      player.on('play', () => {
+        player.options.hideMediaControl = true;
+      })
+
+      function resizePlayer() {
+        var aspectRatio = 9 / 16;
+        var newWidth = window.innerWidth;
+        var newHeight = newWidth * aspectRatio;
+
+        if (newHeight > window.innerHeight) {
+          newHeight = window.innerHeight;
+          newWidth = newHeight / aspectRatio;
+        }
+
+        player.resize({ width: newWidth, height: newHeight });
+      }
+
+      resizePlayer();
+    });
+
+  </script>
+</body>
+
+</html>
