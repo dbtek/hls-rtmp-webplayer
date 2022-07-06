@@ -1,0 +1,16 @@
+version: "3.3"
+services:
+  rtmp:
+    image: alqutami/rtmp-hls
+    ports:
+      - 1935:1935
+      - 8035:8080
+    restart: unless-stopped
+  player:
+    image: ghcr.io/dbtek/hls-rtmp-webplayer/hls-rtmp-webplayer
+    build: .
+    ports:
+      - 8000:80
+    environment:
+      - STREAM_URL=http://localhost:8035/hls/kurban.m3u8
+    restart: unless-stopped
