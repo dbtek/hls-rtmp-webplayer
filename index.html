@@ -4,12 +4,12 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Yaman Player</title>
+  <title>Canlı Yayın</title>
   <meta name="viewport" content="width=device-width; initial-scale=1">
   <style>
     .poster-icon {
       /* color:aquamarine; */
-      background-color: #0742cd;
+      background-color: #ef5350;
       padding: 18px 64px;
       border-radius: 20px;
       /* box-shadow:  2px 2px yellow; */
@@ -33,41 +33,47 @@
 <body style="margin: 0; padding:0;">
   <div id="player" style="margin: 0; padding:0;"></div>
   <script>
-    window.addEventListener('DOMContentLoaded', function () {
-      var player = new Clappr.Player({
-        parentId: '#player',
-        source: 'http://ymnv.tk:8080/hls/kurban.m3u8',
-        hlsjsConfig: {
-          maxMaxBufferLength: 33,
-        },
-        hideMediaControl: true
-      });
-      window.player = player;
+    (function () {
+      var STREAM_URL = '$STREAM_URL';
+      if (STREAM_URL.includes('$')) {
+        console.error('Please set STREAM_URL environment variable');
+        return;
+      }
+      window.addEventListener('DOMContentLoaded', function () {
+        var player = new Clappr.Player({
+          parentId: '#player',
+          source: STREAM_URL,
+          hlsjsConfig: {
+            maxMaxBufferLength: 33,
+          },
+          hideMediaControl: true
+        });
+        window.player = player;
 
-      player.on('pause', () => {
-        player.options.hideMediaControl = false;
-      })
+        player.on('pause', () => {
+          player.options.hideMediaControl = false;
+        })
 
-      player.on('play', () => {
-        player.options.hideMediaControl = true;
-      })
+        player.on('play', () => {
+          player.options.hideMediaControl = true;
+        })
 
-      function resizePlayer() {
-        var aspectRatio = 9 / 16;
-        var newWidth = window.innerWidth;
-        var newHeight = newWidth * aspectRatio;
+        function resizePlayer() {
+          var aspectRatio = 9 / 16;
+          var newWidth = window.innerWidth;
+          var newHeight = newWidth * aspectRatio;
 
-        if (newHeight > window.innerHeight) {
-          newHeight = window.innerHeight;
-          newWidth = newHeight / aspectRatio;
+          if (newHeight > window.innerHeight) {
+            newHeight = window.innerHeight;
+            newWidth = newHeight / aspectRatio;
+          }
+
+          player.resize({ width: newWidth, height: newHeight });
         }
 
-        player.resize({ width: newWidth, height: newHeight });
-      }
-
-      resizePlayer();
-    });
-
+        resizePlayer();
+      });
+    })()
   </script>
 </body>
 
