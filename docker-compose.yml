@@ -4,13 +4,28 @@ services:
     image: alqutami/rtmp-hls
     ports:
       - 1935:1935
-      - 8035:8080
     restart: unless-stopped
   player:
     image: ghcr.io/dbtek/hls-rtmp-webplayer/hls-rtmp-webplayer
-    build: .
     ports:
       - 8000:80
     environment:
-      - STREAM_URL=http://localhost:8035/hls/kurban.m3u8
+      - STREAM_URL=https://example.com/hls/kurban.m3u8
+    restart: unless-stopped
+  swag:
+    image: lscr.io/linuxserver/swag:latest
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Istanbul
+      - URL=example.com
+      - VALIDATION=http
+    volumes:
+      - ./conf:/config
+    ports:
+      - 443:443
+      - 80:80 #optional
     restart: unless-stopped
