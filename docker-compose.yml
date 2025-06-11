@@ -6,7 +6,7 @@ services:
       - 1935:1935
     restart: unless-stopped
   player:
-    image: ghcr.io/dbtek/hls-rtmp-webplayer/hls-rtmp-webplayer
+    image: ghcr.io/dbtek/hls-rtmp-webplayer:master
     ports:
       - 8000:80
     environment:
